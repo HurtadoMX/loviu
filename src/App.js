@@ -1,23 +1,43 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 function App() {
+  const navigate = useNavigate();
+  const [sizeSi, setSizeSi] = useState(1); // Tamaño del botón "Sí"
+  const [sizeNo, setSizeNo] = useState(1); // Tamaño del botón "No"
+
+  const handleNoClick = () => {
+    setSizeSi(sizeSi + 0.1); // Incrementar tamaño del botón "Sí"
+    setSizeNo(sizeNo - 0.1); // Reducir tamaño del botón "No"
+  };
+
+  const handleSiClick = () => {
+    sessionStorage.setItem('fromButtons', 'true'); // Marcamos que el usuario pasó por los botones
+    navigate('/flower'); // Navegar a la pantalla del SVG
+    setSizeSi(1); // Resetear tamaño de los botones
+    setSizeNo(1); // Resetear tamaño de los botones
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>Te puedo preguntar algo?</h1>
+      <div className="buttons-container">
+        <button
+          className="si-button"
+          style={{ transform: `scale(${sizeSi})` }}
+          onClick={handleSiClick}
         >
-          Learn React
-        </a>
-      </header>
+          Sí
+        </button>
+        <button
+          className="no-button"
+          style={{ transform: `scale(${sizeNo})`, visibility: sizeNo <= 0 ? 'hidden' : 'visible' }}
+          onClick={handleNoClick}
+        >
+          No
+        </button>
+      </div>
     </div>
   );
 }
